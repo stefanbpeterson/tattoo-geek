@@ -1,25 +1,20 @@
 import React, { Component } from 'react'
+import { firebase } from './config'
 import { View, Text } from 'react-native'
-import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-const firebaseConfig = {
-  apiKey: "AIzaSyCjxfizKu-Khifosk53aJeuLvdSiaVVtjo",
-  authDomain: "tattoo-geek.firebaseapp.com",
-  projectId: "tattoo-geek",
-  storageBucket: "tattoo-geek.appspot.com",
-  messagingSenderId: "837757489782",
-  appId: "1:837757489782:web:d14077496f2bc71cc08557",
-  measurementId: "G-Q0JBWQFDQ6"
-};
-initializeApp(firebaseConfig)
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Landing from './components/auth/Landing';
 import Register from './components/auth/Register';
+import Main from './components/Main';
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware } from 'redux'
+import rootReducer from './redux/reducers'
+import thunk from 'redux-thunk'
+
+const store = createStore(rootReducer, applyMiddleware(thunk))
 
 const Stack = createStackNavigator();
-const auth = getAuth()
 
 export class App extends Component {
   constructor(props) {
@@ -32,7 +27,7 @@ export class App extends Component {
 
   componentDidMount() {
     
-    onAuthStateChanged(auth, user => {
+    firebase.auth().onAuthStateChanged((user) => {
       if (!user) {
         this.setState({
           loggedIn: false,
@@ -69,9 +64,9 @@ export class App extends Component {
     }
 
     return (
-      <View style={{ flex: 1, justifyContent: 'center'}}>
-        <Text>User is logged in</Text>
-      </View>
+      <Provider store={store}>
+        <Main />
+      </Provider>
     )
 
   }

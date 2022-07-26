@@ -1,20 +1,6 @@
 import React, { Component } from 'react'
 import { View, Button, TextInput } from 'react-native'
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
-import { collection, getFirestore, doc, setDoc } from 'firebase/firestore'
-import { initializeApp } from "firebase/app"
-const firebaseConfig = {
-    apiKey: "AIzaSyCjxfizKu-Khifosk53aJeuLvdSiaVVtjo",
-    authDomain: "tattoo-geek.firebaseapp.com",
-    projectId: "tattoo-geek",
-    storageBucket: "tattoo-geek.appspot.com",
-    messagingSenderId: "837757489782",
-    appId: "1:837757489782:web:d14077496f2bc71cc08557",
-    measurementId: "G-Q0JBWQFDQ6"
-  };
-initializeApp(firebaseConfig)
-
-const firestore = getFirestore()
+import { firebase } from '../../config'
 
 export class Register extends Component {
     constructor(props) {
@@ -25,16 +11,17 @@ export class Register extends Component {
             password: '',
             name: ''
         }
-        
+
         this.onSignUp = this.onSignUp.bind(this)
     }
 
     onSignUp() {
-        const auth = getAuth()
         const { email, password, name } = this.state;
-        createUserWithEmailAndPassword(auth, email, password)
+        firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((result) => {
-                setDoc(doc(firestore, 'users', auth.currentUser.uid), {
+            firebase.firestore().collection('users')
+                .doc(firebase.auth().currentUser.uid)
+                .set({
                     name,
                     email
                 })
