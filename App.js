@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import { firebase } from './config'
 import { View, Text } from 'react-native'
-import { StatusBar } from 'expo-status-bar';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import Landing from './components/auth/Landing';
-import Register from './components/auth/Register';
-import Main from './components/Main';
+import { StatusBar } from 'expo-status-bar'
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+import Landing from './components/auth/Landing'
+import Register from './components/auth/Register'
+import Login from './components/auth/Login'
+import Main from './components/Main'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './redux/reducers'
@@ -14,7 +15,7 @@ import thunk from 'redux-thunk'
 
 const store = createStore(rootReducer, applyMiddleware(thunk))
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator()
 
 export class App extends Component {
   constructor(props) {
@@ -58,6 +59,7 @@ export class App extends Component {
           <Stack.Navigator initialRouteName='Landing'>
             <Stack.Screen name='Landing' component={Landing} options={{ headerShown: false }} />
             <Stack.Screen name='Register' component={Register} />
+            <Stack.Screen name='Login' component={Login} />
           </Stack.Navigator>
         </NavigationContainer>
       )
@@ -65,7 +67,11 @@ export class App extends Component {
 
     return (
       <Provider store={store}>
-        <Main />
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName='Landing'>
+            <Stack.Screen name='Main' component={Main} options={{ headerShown: false }} />
+          </Stack.Navigator>
+        </NavigationContainer>
       </Provider>
     )
 
