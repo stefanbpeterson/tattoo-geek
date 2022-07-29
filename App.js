@@ -7,7 +7,8 @@ import { createStackNavigator } from '@react-navigation/stack'
 import Landing from './components/auth/Landing'
 import Register from './components/auth/Register'
 import Login from './components/auth/Login'
-import Main from './components/Main'
+import MainScreen from './components/MainScreen'
+import AddScreen from './components/main/AddScreen'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './redux/reducers'
@@ -69,7 +70,8 @@ export class App extends Component {
       <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator initialRouteName='Landing'>
-            <Stack.Screen name='Main' component={Main} options={{ headerShown: false }} />
+            <Stack.Screen name='Main' component={MainScreen} options={{ headerShown: false }} />
+            <Stack.Screen name='Add' component={AddScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
